@@ -1,0 +1,38 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	
+		<script type="text/javascript" src="https://www.khronos.org/registry/webgl/sdk/demos/common/webgl-utils.js"> 
+		</script> 
+		<script type="text/javascript" src="initShaders.js"> </script> 
+		<script type="text/javascript" src="Square.js"> </script> 
+
+		<script id="vertex-shader" type="x-shader/x-vertex"> 
+		attribute  vec4 vPosition;
+		varying    vec4 fColor;
+		void main() { 
+		fColor = vec4(0.0, 0.0, 1.0, 1.0);
+		vec4 temp = vPosition;
+		temp.xy -= vec2(0.5);
+		temp.xy *= 1.5;
+		gl_Position = temp; 
+		}
+		</script>
+		
+		<script id="fragment-shader" type="x-shader/x-fragment">
+		
+		precision highp float;
+		
+		varying  vec4 fColor;
+		
+		void main() 
+		{   
+			gl_FragColor = fColor; 
+		} 
+		</script>
+		
+	</head> 
+		<body> 
+			<canvas id="webgl-canvas" width="512" height="512"></canvas> 
+		</body> 
+</html>
