@@ -46,8 +46,11 @@ var Cylinder = {
 		var offset = 0;
 		gl.drawElements(gl.TRIANGLES_FAN, count,
 		gl.UNSIGNED_SHORT, offset);
-		count = 10;  // same number of indices for the cone as the base        
-		offset = 10 * /* sizeof(unsigned short) = */ 2;         
+		count = 10;
+		offset = 10;
+		gl.drawElements(gl.TRIANGLE_FAN, count, gl.UNSIGNED_SHORT, offset);
+		cout = 18;
+		offset = 20;
 		gl.drawElements(gl.TRIANGLE_FAN, count, gl.UNSIGNED_SHORT, offset);
 	}
 };
