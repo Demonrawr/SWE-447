@@ -1,5 +1,6 @@
 "use strict";
 var Cylinder = { 
+	numSides: 100,
 	positions : {
 		numComponents:3 
 		}, 
@@ -8,21 +9,44 @@ var Cylinder = {
 	program: undefined,
 	
 	init: function(){
-		var numSides = 8;
-        var dTheta = 2.0 * Math.PI / numSides;
+        var dTheta = 2.0 * Math.PI / this.numSides;
 		var positions = [ 0.0, 0.0, 0.0 ];
-		var indices = [ 0 ];
-		for ( var i = 0; i < numSides; ++i){
+		var indices = [  ];
+		for ( var i = 0; i < this.numSides; ++i){
 			var theta = i * dTheta;
 			var x = Math.cos(theta),
 				y = Math.sin(theta),
 				z = 0.0;
-				positions.push(x, y, z);
-				indices.push(i+1);}
-        indices.push(1);
-        positions.push(0.0, 0.0, 1.0);
-			indices = indices.concat(indices);
-			indices[numSides + 2] = numSides + 1;
+				positions.push(x, y, z);}
+		for ( var i = 0; i < this.numSides; ++i){
+			var theta = i * dTheta;
+			var x = Math.cos(theta),
+				y = Math.sin(theta),
+				z = 1.0;
+				positions.push(x, y, z);}
+				positions.push(0,0,1);
+				this.positions.count = positions.length/this.positions.numComponents;
+			
+		indices.push(0, 1);
+		for(var i = this.numSides; i > 0; --i){
+			indices.push(i);
+		}
+		indices.push(this.numSides*2+1);
+		for(var i = 0; i < this.numSides; ++i){
+			indices.push(i+this.numSides+1);
+		}
+		indices.push(this.numSides+1);
+		
+		indices.push(1, this.numSides+1);
+		
+		for(var i = 1; i < this.numSides+1; ++i) {
+		
+		indices.push(this.numSides+1-i);
+		indices.push(this.numSides*2+1-i);
+
+		}
+		
+		console.log(indices);
 		
 		this.program = initShaders(gl, "Cylinder-vertex-shader", "Cylinder-fragment-shader");
 		this.positions.buffer = gl.createBuffer();
@@ -42,15 +66,18 @@ var Cylinder = {
 		gl.enableVertexAttribArray(this.positions.attribute);
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer);
-		var count = 10;
+		var count = this.numSides+2;
 		var offset = 0;
-		gl.drawElements(gl.TRIANGLES_FAN, count,
+		
+		/*gl.drawArrays(gl.POINTS, 0, this.positions.count);*/
+		gl.drawElements(gl.TRIANGLE_FAN, count,
 		gl.UNSIGNED_SHORT, offset);
-		count = 10;
-		offset = 10;
+		offset += 2*count;
+		count = this.numSides+2;
 		gl.drawElements(gl.TRIANGLE_FAN, count, gl.UNSIGNED_SHORT, offset);
-		cout = 18;
-		offset = 20;
-		gl.drawElements(gl.TRIANGLE_FAN, count, gl.UNSIGNED_SHORT, offset);
+		offset += 2*count;
+		count = this.numSides*2+2;
+		gl.drawElements(gl.TRIANGLE_STRIP, count, gl.UNSIGNED_SHORT, offset);
+		
 	}
 };
