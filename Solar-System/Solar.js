@@ -43,7 +43,7 @@ var far = 120;      // far clipping plane's distance
 // Animation variables
 var time = 0.0;      // time, our global time constant, which is 
                      // incremented every frame
-var timeDelta = .3; // the amount that time is updated each fraime
+var timeDelta = .65; // the amount that time is updated each fraime
 
 // An angular velocity that could be applied to 
 var angularVelocity = Math.PI / 10;
